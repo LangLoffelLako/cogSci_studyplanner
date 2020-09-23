@@ -6,8 +6,7 @@ Add testclass for the functionality of the classes.
 """
 
 import unittest
-from copy import deepcopy
-from classes import Module, Collector, Course
+from cls.classes import Module, Collector, Course
 
 
 class BasicClassTest(unittest.TestCase):
@@ -16,8 +15,8 @@ class BasicClassTest(unittest.TestCase):
     def setUp(self) -> None:
 
         self.testModule = Module('test unit', code='123456')
-        self.testCourse = Course('test course', code='123456', semester='WS20', credits=5)
-        self.testCollector = Collector('test module', code='123456', requiredCredits=16)
+        self.testCourse = Course('test course', code='123456', semester='WS20', init_credits=5)
+        self.testCollector = Collector('test module', code='123456', required_credits=16)
 
     def tearDown(self) -> None:
         pass
@@ -40,7 +39,7 @@ class BasicClassTest(unittest.TestCase):
         self.assertIsInstance(testCourse, Course)
         testCourse = Course('test course', '123456', 5, 'WS20')
         self.assertIsInstance(testCourse, Course)
-        testCourse = Course(name='test course', code='123456', semester='WS20', credits=5)
+        testCourse = Course(name='test course', code='123456', semester='WS20', init_credits=5)
         self.assertIsInstance(testCourse, Course)
 
         #Collector classes are initiated
@@ -48,7 +47,7 @@ class BasicClassTest(unittest.TestCase):
         self.assertIsInstance(testCollector, Collector)
         testCollector = Collector('test module', '123456', 16)
         self.assertIsInstance(testCollector, Collector)
-        testCollector = Collector(name='test module', code='123456', requiredCredits=16)
+        testCollector = Collector(name='test module', code='123456', required_credits=16)
         self.assertIsInstance(testCollector, Collector)
 
     def testClassPropertyGrades(self):
@@ -137,27 +136,27 @@ class BasicClassTest(unittest.TestCase):
 
         # appropriate values
         for testCredits in creditsPass:
-            self.testCollector.requiredCredits = testCredits
-            self.assertEqual(self.testCollector.requiredCredits, int(testCredits))
+            self.testCollector.required_credits = testCredits
+            self.assertEqual(self.testCollector.required_credits, int(testCredits))
 
         # inappropriate values
         with self.assertRaises(ValueError):
             for testCredits in creditsValueError:
-                self.testCollector.requiredCredits = testCredits
+                self.testCollector.required_credits = testCredits
         with self.assertRaises(TypeError):
             for testCredits in creditsTypeError:
-                self.testCollector.requiredCredits = testCredits
+                self.testCollector.required_credits = testCredits
 
     def testCollectorFuncAddRemoveModule(self):
         """Tests the correct behavior of the addModule function of the collectorClass"""
 
-        self.testCollector.addModule(self.testModule, 1)
+        self.testCollector.add_module(self.testModule, 1)
 
         self.assertIn(self.testModule, self.testCollector.submodules)
         self.assertIn(self.testCollector, self.testModule.collectors)
         self.assertEqual(self.testModule.weight, 1)
 
-        self.testCollector.removeModule(self.testModule)
+        self.testCollector.remove_module(self.testModule)
 
         self.assertNotIn(self.testModule, self.testCollector.submodules)
         self.assertNotIn(self.testCollector, self.testModule.collectors)
@@ -165,13 +164,13 @@ class BasicClassTest(unittest.TestCase):
 
     def testCollectorCalcCredits(self):
         """Test the calcCredit function"""
-        testCourses = [Course('Course 1', credits=6),
-                       Course('Course 1', credits=4),
-                       Course('Course 1', credits=4)]
+        testCourses = [Course('Course 1', init_credits=6),
+                       Course('Course 1', init_credits=4),
+                       Course('Course 1', init_credits=4)]
         testCredits = 0
 
         for course in testCourses:
-            self.testCollector.addModule(course, 1)
+            self.testCollector.add_module(course, 1)
 
         self.assertEqual(self.testCollector.credits,testCredits)
 
@@ -183,16 +182,16 @@ class BasicClassTest(unittest.TestCase):
 
     def testCollectorCalcGrade(self):
         """Test the calcGrade function"""
-        testCourses = [Course('Course 1', credits=6),
-                       Course('Course 1', credits=4),
-                       Course('Course 1', credits=4)]
+        testCourses = [Course('Course 1', init_credits=6),
+                       Course('Course 1', init_credits=4),
+                       Course('Course 1', init_credits=4)]
         grades = [4, 1, 5]
         weights = [2, 1, 45]
         testGrade = 0
 
         for course in testCourses:
             course.grade = grades[testCourses.index(course)]
-            self.testCollector.addModule(course, weights[testCourses.index(course)])
+            self.testCollector.add_module(course, weights[testCourses.index(course)])
             testGrade += grades[testCourses.index(course)] * weights[testCourses.index(course)]
 
         testGrade /= len(testCourses)
@@ -200,12 +199,12 @@ class BasicClassTest(unittest.TestCase):
 
     def testCollectorCalcPassed(self):
         """Test the calcPassed function"""
-        testCourses = [Course('Course 1', credits=6),
-                       Course('Course 1', credits=4),
-                       Course('Course 1', credits=4)]
+        testCourses = [Course('Course 1', init_credits=6),
+                       Course('Course 1', init_credits=4),
+                       Course('Course 1', init_credits=4)]
 
         for course in testCourses:
-            self.testCollector.addModule(course, 1)
+            self.testCollector.add_module(course, 1)
 
         for course in testCourses:
             course.passed = False
@@ -224,28 +223,28 @@ class BasicClassTest(unittest.TestCase):
 
     def testUpdate(self):
 
-        testCourses = [Course('Course 1', credits=6),
-                       Course('Course 1', credits=4),
-                       Course('Course 1', credits=4)]
+        testCourses = [Course('Course 1', init_credits=6),
+                       Course('Course 1', init_credits=4),
+                       Course('Course 1', init_credits=4)]
 
-        testCollectors = [Collector('Collector 1', requiredCredits=20),
-                          Collector('Collector 1', requiredCredits=20),
-                          Collector('Collector 1', requiredCredits=20)]
+        testCollectors = [Collector('Collector 1', required_credits=20),
+                          Collector('Collector 1', required_credits=20),
+                          Collector('Collector 1', required_credits=20)]
 
         for course in testCourses:
-            self.testCollector.addModule(course, 1)
+            self.testCollector.add_module(course, 1)
 
-        self.assertEqual(self.testCollector.requiredCredits,16)
+        self.assertEqual(self.testCollector.required_credits, 16)
 
         for collector in testCollectors:
-            self.testCollector.addModule(collector,1)
+            self.testCollector.add_module(collector, 1)
 
-        self.assertEqual(self.testCollector.requiredCredits,16)
+        self.assertEqual(self.testCollector.required_credits, 16)
 
         for course in testCourses:
-            self.testCollector.removeModule(course)
+            self.testCollector.remove_module(course)
 
-        self.assertEqual(self.testCollector.requiredCredits,60)
+        self.assertEqual(self.testCollector.required_credits, 60)
 
 
 
