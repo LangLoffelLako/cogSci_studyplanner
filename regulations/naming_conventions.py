@@ -1,5 +1,5 @@
 """
-Naming conventions to make for consistent naming
+Naming conventions to make for consistent naming. These are used in the regulations files.
 """
 
 # general naming conventions

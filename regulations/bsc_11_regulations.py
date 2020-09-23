@@ -1,5 +1,13 @@
 """
-Structure for the study bachelor of science 2019 study regulations
+Structure for the study bachelor of science 2011 study regulations. Under the 'degree' list we find the
+general structure of the curriculum. 'placeholders' will probably be a legacy function, but will serve to show how many
+of the fields can be chosen as 'wahlpflichtbereiche'. 'pflichtbereich' and 'wahlpflichtbereich' are courses to be used
+to replace the placeholders.
+
+Remarks:
+-'credits' does equal the required credits in the class structure.
+-To understand how this information will be transformed into the class structure look at the
+register_regulations.register_modules function.
 """
 
 from regulations import naming_conventions as name
